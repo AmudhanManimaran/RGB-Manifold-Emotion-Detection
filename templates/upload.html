@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or "Image Emotion Analyzer" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            padding: 50px 60px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header Section */
+        h1 {
+            color: #2d3748;
+            font-size: 2.3rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideDown 0.5s ease-out;
+            line-height: 1.3;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #4a5568;
+            font-size: 1.05rem;
+            margin-bottom: 40px;
+            font-weight: 500;
+            animation: fadeIn 0.7s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Feature Cards */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-out 0.3s both;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f6f8fb 0%, #ffffff 100%);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 3px solid #667eea;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-card h3 {
+            color: #2d3748;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: #4a5568;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        /* Upload Form */
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-bottom: 40px;
+            animation: fadeIn 0.9s ease-out 0.4s both;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-label {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 12px;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid #cbd5e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .form-input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-input:hover {
+            border-color: #a0aec0;
+        }
+
+        /* Custom File Input */
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ffffff 0%, #f6f8fb 100%);
+            border: 2px dashed #cbd5e0;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            transform: translateY(-2px);
+        }
+
+        .file-input-wrapper.dragover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #e6e9ff 0%, #f0f3ff 100%);
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-upload-content {
+            pointer-events: none;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .file-upload-text {
+            color: #2d3748;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .file-name-display {
+            margin-top: 15px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .file-name-display.active {
+            display: block;
+        }
+
+        /* Select Dropdown */
+        select.form-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23667eea' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 20px center;
+            padding-right: 50px;
+        }
+
+        /* Algorithm Info Cards */
+        .algo-info {
+            display: none;
+            margin-top: 15px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #e6e9ff 0%, #f0f3ff 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .algo-info.active {
+            display: block;
+        }
+
+        .algo-info p {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Submit Button */
+        .upload-btn {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .upload-btn:hover::before {
+            left: 100%;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .upload-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .upload-btn:disabled {
+            background: linear-gradient(135deg, #cbd5e0 0%, #a0aec0 100%);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Link Box */
+        .link-box {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .link-box p {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .link-box a {
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            padding: 14px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
+        }
+
+        .link-box a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.5);
+        }
+
+        /* Preview Section */
+        .preview-section {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #ffffff 100%);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .preview-section.active {
+            display: block;
+        }
+
+        .preview-section h3 {
+            color: #2d3748;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .spinner {
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: #4a5568;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 35px 25px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .upload-btn {
+                font-size: 1rem;
+                padding: 16px 35px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .file-input-wrapper {
+                padding: 30px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="container">
+        <h1>Emotion Detection in Colour Associations in an Art</h1>
+        <p class="subtitle">AI-Powered Color Analysis & Emotion Recognition</p>
+
+        <!-- Feature Cards -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Color Extraction</h3>
+                <p>Advanced algorithms detect dominant colors</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>AI Analysis</h3>
+                <p>Machine learning maps colors to emotions</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Visual Insights</h3>
+                <p>Comprehensive charts and data visualization</p>
+            </div>
+        </div>
+
+        <!-- Upload Form -->
+        <form action="{{ url_for('upload_image') }}" method="post" enctype="multipart/form-data" aria-label="Image Upload Form" class="upload-form" id="uploadForm">
+            
+            <div class="form-group">
+                <label for="image" class="form-label">Choose an image to analyze</label>
+                <div class="file-input-wrapper" id="fileWrapper">
+                    <input type="file" id="image" name="image" accept="image/*" required />
+                    <div class="file-upload-content">
+                        <div class="upload-icon">📸</div>
+                        <p class="file-upload-text">Click to browse or drag & drop</p>
+                        <p class="file-upload-hint">Supports: JPG, PNG, GIF (Max 10MB)</p>
+                    </div>
+                    <div class="file-name-display" id="fileNameDisplay"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="method" class="form-label">Select Clustering Algorithm</label>
+                <select id="method" name="method" class="form-input">
+                    <option value="kmeans">K-Means Clustering</option>
+                    <option value="gmm">Gaussian Mixture Model (GMM)</option>
+                </select>
+                
+                <!-- Algorithm Info -->
+                <div class="algo-info" id="kmeansInfo">
+                    <p><strong>K-Means:</strong> Fast and efficient clustering algorithm that groups similar colors together. Best for images with distinct color regions.</p>
+                </div>
+                <div class="algo-info" id="gmmInfo">
+                    <p><strong>GMM:</strong> Probabilistic model that handles overlapping colors better. Ideal for images with gradients and soft color transitions.</p>
+                </div>
+            </div>
+
+            <button type="submit" class="upload-btn" id="submitBtn">
+                Analyze Image
+            </button>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <span class="loading-text">Analyzing your image...</span>
+            </div>
+        </form>
+
+        <!-- Preview Section -->
+        <div class="preview-section" id="previewSection">
+            <h3>Image Preview</h3>
+            <img class="preview-image" id="previewImage" alt="Image preview" />
+        </div>
+
+        <!-- Reference Link -->
+        <div class="link-box">
+            <p>Need help understanding the results?</p>
+            <a href="{{ url_for('hsi_reference') }}">View HSI Reference Tables</a>
+        </div>
+    </main>
+
+    <script>
+        // File input handling
+        const fileInput = document.getElementById('image');
+        const fileWrapper = document.getElementById('fileWrapper');
+        const fileNameDisplay = document.getElementById('fileNameDisplay');
+        const previewSection = document.getElementById('previewSection');
+        const previewImage = document.getElementById('previewImage');
+        const uploadForm = document.getElementById('uploadForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+
+        // Click to upload
+        fileWrapper.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // File selection
+        fileInput.addEventListener('change', (e) => {
+            handleFile(e.target.files[0]);
+        });
+
+        // Drag and drop
+        fileWrapper.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileWrapper.classList.add('dragover');
+        });
+
+        fileWrapper.addEventListener('dragleave', () => {
+            fileWrapper.classList.remove('dragover');
+        });
+
+        fileWrapper.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileWrapper.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                fileInput.files = e.dataTransfer.files;
+                handleFile(file);
+            }
+        });
+
+        function handleFile(file) {
+            if (file) {
+                // Display file name
+                fileNameDisplay.textContent = `Selected: ${file.name}`;
+                fileNameDisplay.classList.add('active');
+
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImage.src = e.target.result;
+                    previewSection.classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Algorithm selection info
+        const methodSelect = document.getElementById('method');
+        const kmeansInfo = document.getElementById('kmeansInfo');
+        const gmmInfo = document.getElementById('gmmInfo');
+
+        methodSelect.addEventListener('change', () => {
+            kmeansInfo.classList.remove('active');
+            gmmInfo.classList.remove('active');
+            
+            if (methodSelect.value === 'kmeans') {
+                kmeansInfo.classList.add('active');
+            } else {
+                gmmInfo.classList.add('active');
+            }
+        });
+
+        // Show K-Means info by default
+        kmeansInfo.classList.add('active');
+
+        // Form submission
+        uploadForm.addEventListener('submit', (e) => {
+            if (fileInput.files.length > 0) {
+                submitBtn.disabled = true;
+                loading.classList.add('active');
+            }
+        });
+
+        // Prevent multiple submissions
+        let isSubmitting = false;
+        uploadForm.addEventListener('submit', (e) => {
+            if (isSubmitting) {
+                e.preventDefault();
+                return;
+            }
+            isSubmitting = true;
+        });
+    </script>
+</body>
+</html>

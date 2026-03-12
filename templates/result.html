@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            color: #4a5568;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 15px;
+            animation: fadeIn 0.7s ease-out 0.2s both;
+        }
+
+        .tab-btn {
+            padding: 12px 28px;
+            background: white;
+            border: 2px solid #cbd5e0;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            color: #4a5568;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Section Styling */
+        .section {
+            display: none;
+            animation: fadeInSection 0.5s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInSection {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #2d3748;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 35px 0 25px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        /* Image Section */
+        .image-container {
+            position: relative;
+            max-width: 900px;
+            margin: 30px auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .image-container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .image-container img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .image-container:hover .image-overlay {
+            transform: translateY(0);
+        }
+
+        .image-overlay p {
+            color: white;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        /* Chart Grid */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .chart-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .chart-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .chart-card h3 {
+            color: #2d3748;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-card h3::before {
+            content: '📊';
+            font-size: 1.5rem;
+        }
+
+        .chart-card img {
+            width: 100%;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .chart-card:hover img {
+            transform: scale(1.03);
+        }
+
+        /* HSI Values Grid */
+        .hsi-values {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .hsi-column {
+            background: linear-gradient(135deg, #ffffff 0%, #f6f8fb 100%);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .hsi-column:nth-child(2) {
+            border-left-color: #764ba2;
+        }
+
+        .hsi-column:nth-child(3) {
+            border-left-color: #48bb78;
+        }
+
+        .hsi-column:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .hsi-column h3 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .hsi-column ul {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .hsi-column ul::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .hsi-column ul::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .hsi-column ul::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+
+        .hsi-column li {
+            padding: 10px 15px;
+            margin: 6px 0;
+            background: white;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .hsi-column li:hover {
+            background: linear-gradient(90deg, #f7fafc 0%, #edf2f7 100%);
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table Styling */
+        .table-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-card:hover {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        th {
+            padding: 18px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px 18px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, #f7fafc 0%, #edf2f7 100%);
+            transform: scale(1.01);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Color Box */
+        .color-box {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+            border: 2px solid #cbd5e0;
+            margin-right: 12px;
+            vertical-align: middle;
+            background-color: var(--box-color);
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .color-box:hover {
+            transform: scale(1.2) rotate(5deg);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Accuracy Badge */
+        .accuracy-section {
+            text-align: center;
+            margin: 40px 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 15px;
+        }
+
+        .accuracy-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            padding: 18px 40px;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            box-shadow: 0 5px 20px rgba(72, 187, 120, 0.4);
+            animation: pulse 2s infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .accuracy-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Statistics Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f6f8fb 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-top: 4px solid #667eea;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-card h4 {
+            color: #4a5568;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .stat-value {
+            color: #667eea;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        /* Link Box */
+        .link-box {
+            margin-top: 50px;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 15px;
+        }
+
+        .link-box a {
+            display: inline-block;
+            text-decoration: none;
+            margin: 10px 15px;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px 35px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .link-box a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Download Button */
+        .download-btn {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            margin-top: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            .chart-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .link-box a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(102, 126, 234, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .spinner {
+            border: 8px solid rgba(255, 255, 255, 0.3);
+            border-top: 8px solid white;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header-section">
+            <h1>Emotion Analysis Result</h1>
+            <p class="subtitle">AI-Powered Color & Emotion Detection Analysis</p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
+            <button class="tab-btn" onclick="showTab('colors')">Color Analysis</button>
+            <button class="tab-btn" onclick="showTab('emotions')">Emotion Detection</button>
+            <button class="tab-btn" onclick="showTab('hsi')">HSI Analysis</button>
+            <button class="tab-btn" onclick="showTab('data')">Detailed Data</button>
+        </div>
+
+        <!-- Overview Section -->
+        <div id="overview" class="section active">
+            <h2>Uploaded Artwork</h2>
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='uploads/' + uploaded_image) }}" alt="Uploaded Image" />
+                <div class="image-overlay">
+                    <p>Original image analyzed for emotional content through color extraction</p>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h4>Colors Detected</h4>
+                    <div class="stat-value">{{ color_table|length }}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Emotions Found</h4>
+                    <div class="stat-value">{{ emotions|length }}</div>
+                </div>
+                <div class="stat-card">
+                    <h4>Weighted Emotion Accuracy</h4>
+                    <div class="stat-value">{{ accuracy }}%</div>
+                </div>
+            </div>
+
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Dominant Colors</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + color_chart) }}" alt="Dominant Colors Chart" />
+                </div>
+                <div class="chart-card">
+                    <h3>Emotion Distribution</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + emotion_chart) }}" alt="Emotion Chart" />
+                </div>
+            </div>
+        </div>
+
+        <!-- Color Analysis Section -->
+        <div id="colors" class="section">
+            <h2>Color Analysis</h2>
+            
+            <div class="table-card">
+                <h3>Extracted Colors</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Color</th>
+                            <th>Hex Code</th>
+                            <th>Percentage (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in color_table %}
+                        <tr>
+                            <td><span class="color-box" style="--box-color: {{ row.hex }};"></span></td>
+                            <td>{{ row.hex }}</td>
+                            <td>{{ row.percentage }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="chart-card">
+                <h3>Color Distribution</h3>
+                <img src="{{ url_for('static', filename='uploads/' + color_chart) }}" alt="Color Distribution" />
+            </div>
+        </div>
+
+        <!-- Emotions Section -->
+        <div id="emotions" class="section">
+            <h2>Emotion Detection Results</h2>
+            
+            <div class="table-card">
+                <h3>Detected Emotions</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Emotion</th>
+                            <th>Count</th>
+                            <th>Prevalence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for emotion, count in emotions.items() %}
+                        <tr>
+                            <td>{{ emotion }}</td>
+                            <td>{{ count }}</td>
+                            <td>{{ emotions_prevalence[emotion] }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="chart-card">
+                <h3>Emotion Distribution</h3>
+                <img src="{{ url_for('static', filename='uploads/' + emotion_chart) }}" alt="Emotion Distribution" />
+            </div>
+
+            <div class="table-card">
+                <h3></h3>
+                
+            </div>
+        </div>
+
+        <!-- HSI Analysis Section -->
+        <div id="hsi" class="section">
+            <h2>HSI (Hue, Saturation, Intensity) Analysis</h2>
+            
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <h3>Hue Distribution</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + hue_pie_chart) }}" alt="Hue Pie Chart" />
+                </div>
+                <div class="chart-card">
+                    <h3>Saturation Levels</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + saturation_bar_chart) }}" alt="Saturation Bar Chart" />
+                </div>
+                <div class="chart-card">
+                    <h3>Intensity Levels</h3>
+                    <img src="{{ url_for('static', filename='uploads/' + intensity_bar_chart) }}" alt="Intensity Bar Chart" />
+                </div>
+            </div>
+
+            <h2>HSI Values</h2>
+            <div class="hsi-values">
+                <div class="hsi-column">
+                    <h3>Hue (°)</h3>
+                    <ul>
+                        {% for hue in hues %}
+                        <li>{{ hue }}°</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="hsi-column">
+                    <h3>Saturation</h3>
+                    <ul>
+                        {% for sat in saturations %}
+                        <li>{{ sat }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="hsi-column">
+                    <h3>Intensity</h3>
+                    <ul>
+                        {% for inten in intensities %}
+                        <li>{{ inten }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Data Section -->
+        <div id="data" class="section">
+            <h2>Complete Analysis Data</h2>
+            
+            <div class="table-card">
+            <div class="table-card">
+                <h3>Color-Emotion Mapping</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Color</th>
+                            <th>RGB Value</th>
+                            <th>Emotion</th>
+                            <th>Confidence (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for hex_color, rgb_tuple, emotion, confidence in color_emotion_map %}
+                        <tr>
+                            <td><span class="color-box" style="--box-color: {{ hex_color }};"></span> {{ hex_color }}</td>
+                            <td>{{ rgb_tuple }}</td>
+                            <td>{{ emotion }}</td>
+                            <td>{{ confidence }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <!-- Accuracy Badge -->
+        <div class="accuracy-section">
+            <div class="accuracy-badge">
+                Weighted Emotion Accuracy: {{ accuracy }}%
+            </div>
+        </div>
+
+        <!-- Action Links -->
+        <div class="link-box">
+            <a href="{{ url_for('upload_form') }}">Analyze Another Image</a>
+            <a href="{{ url_for('hsi_reference') }}">View Reference Tables</a>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected section
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.classList.add('active');
+
+            // Smooth scroll to top of content
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Add tooltip functionality for color boxes
+        document.querySelectorAll('.color-box').forEach(box => {
+            box.addEventListener('click', function() {
+                const color = this.style.getPropertyValue('--box-color');
+                navigator.clipboard.writeText(color).then(() => {
+                    // Create temporary tooltip
+                    const tooltip = document.createElement('div');
+                    tooltip.textContent = 'Color copied!';
+                    tooltip.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #48bb78; color: white; padding: 10px 20px; border-radius: 8px; z-index: 10000;';
+                    document.body.appendChild(tooltip);
+                    setTimeout(() => tooltip.remove(), 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

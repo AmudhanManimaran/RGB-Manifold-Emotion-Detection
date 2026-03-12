@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSI & Emotion Reference Tables</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #4a5568;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            font-weight: 500;
+        }
+
+        /* Navigation Tabs */
+        .tab-navigation {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 15px;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            background: white;
+            border: 2px solid #cbd5e0;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            color: #4a5568;
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Section Styling */
+        .section {
+            display: none;
+            animation: fadeInSection 0.5s ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInSection {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #2d3748;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin: 35px 0 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        /* Card Layout for Tables */
+        .table-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .table-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Enhanced Table Styling */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(90deg, #f7fafc 0%, #edf2f7 100%);
+            transform: scale(1.01);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Enhanced Color Box */
+        .color-box {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            border: 2px solid #cbd5e0;
+            vertical-align: middle;
+            margin-right: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .color-box:hover {
+            transform: scale(1.2) rotate(5deg);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Info Cards for HSI Sections */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .info-card {
+            background: linear-gradient(135deg, #f6f8fb 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 4px solid #667eea;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+            border-left-color: #764ba2;
+        }
+
+        .info-card h3 {
+            color: #667eea;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .info-card p {
+            color: #4a5568;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        /* Emotion Category Tags */
+        .emotion-category {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .category-primary {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+        }
+
+        .category-secondary {
+            background: linear-gradient(135deg, #4299e1 0%, #3182ce 100%);
+            color: white;
+        }
+
+        .category-tertiary {
+            background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+            color: white;
+        }
+
+        .category-low {
+            background: linear-gradient(135deg, #ecc94b 0%, #d69e2e 100%);
+            color: white;
+        }
+
+        .category-high {
+            background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+            color: white;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 15px 25px;
+            border: 2px solid #cbd5e0;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Back Button */
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 15px 35px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .back-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.6);
+        }
+
+        .back-container {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            background: linear-gradient(135deg, #f6f8fb 0%, #e9ecef 100%);
+            border-radius: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .tab-navigation {
+                flex-direction: column;
+            }
+
+            .tab-btn {
+                width: 100%;
+            }
+
+            table {
+                font-size: 0.85rem;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+
+            .color-box {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Highlight on search */
+        .highlight {
+            background: linear-gradient(90deg, #fef3c7 0%, #fde68a 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 HSI & Emotion Reference Guide</h1>
+        <p class="subtitle">Based on Plutchik's Wheel of Emotions</p>
+
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchInput" placeholder="🔍 Search emotions, colors, or values...">
+        </div>
+
+        <div class="tab-navigation">
+            <button class="tab-btn active" onclick="showSection('hsi')">HSI Values</button>
+            <button class="tab-btn" onclick="showSection('primary')">Primary Emotions</button>
+            <button class="tab-btn" onclick="showSection('intensity')">Intensity Levels</button>
+            <button class="tab-btn" onclick="showSection('dyadic')">Dyadic Emotions</button>
+            <button class="tab-btn" onclick="showSection('special')">Special Colors</button>
+        </div>
+
+        <div id="hsi" class="section active">
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📊 What is HSI?</h3>
+                    <p>HSI stands for Hue, Saturation, and Intensity - a color model that represents colors in a way that's more intuitive to human perception than RGB.</p>
+                </div>
+                <div class="info-card">
+                    <h3>🎨 Why HSI Matters</h3>
+                    <p>Understanding HSI helps in emotion detection because different hues, saturation levels, and intensities evoke specific emotional responses in viewers.</p>
+                </div>
+                <div class="info-card">
+                    <h3>🔬 Our Approach</h3>
+                    <p>We analyze artwork by extracting HSI values and mapping them to Plutchik's emotional color associations for accurate emotion detection.</p>
+                </div>
+            </div>
+
+            <div class="table-card">
+                <h2>Hue (°) → Color Mapping</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Hue Range (°)</th>
+                            <th>Colour</th>
+                            <th>Typical Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0 – 15</td><td>Red</td><td>Pure Red</td></tr>
+                        <tr><td>16 – 30</td><td>Reddish Orange</td><td>Vermilion, Coral</td></tr>
+                        <tr><td>31 – 45</td><td>Orange</td><td>Standard Orange</td></tr>
+                        <tr><td>46 – 60</td><td>Yellow-Orange</td><td>Amber</td></tr>
+                        <tr><td>61 – 80</td><td>Yellow</td><td>Lemon Yellow</td></tr>
+                        <tr><td>81 – 140</td><td>Yellow-Green</td><td>Lime, Chartreuse</td></tr>
+                        <tr><td>141 – 169</td><td>Green</td><td>Leaf Green, Emerald</td></tr>
+                        <tr><td>170 – 200</td><td>Cyan-Green</td><td>Aqua, Turquoise</td></tr>
+                        <tr><td>201 – 220</td><td>Cyan</td><td>Teal Blue, Sky Blue</td></tr>
+                        <tr><td>221 – 240</td><td>Blue</td><td>Royal Blue, Azure</td></tr>
+                        <tr><td>241 – 260</td><td>Indigo</td><td>Deep Blue</td></tr>
+                        <tr><td>261 – 280</td><td>Violet</td><td>Purple, Blue-Violet</td></tr>
+                        <tr><td>281 – 300</td><td>Magenta</td><td>Violet-Red, Orchid</td></tr>
+                        <tr><td>301 – 330</td><td>Pink</td><td>Rose, Fuchsia</td></tr>
+                        <tr><td>331 – 360</td><td>Red</td><td>Returning to Red on the wheel</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-card">
+                <h2>Saturation (S) → Meaning & Appearance</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Saturation Range</th>
+                            <th>Interpretation</th>
+                            <th>Visual Appearance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0.00 – 0.05</td><td>Achromatic / Neutral Gray</td><td>No color at all</td></tr>
+                        <tr><td>0.06 – 0.15</td><td>Very Dull</td><td>Almost gray</td></tr>
+                        <tr><td>0.16 – 0.30</td><td>Muted / Pastel</td><td>Soft, pale</td></tr>
+                        <tr><td>0.31 – 0.45</td><td>Light Tone</td><td>Clear, gentle</td></tr>
+                        <tr><td>0.46 – 0.60</td><td>Natural Color</td><td>Balanced color</td></tr>
+                        <tr><td>0.61 – 0.75</td><td>Rich</td><td>Strong</td></tr>
+                        <tr><td>0.76 – 0.90</td><td>Vivid</td><td>Very intense</td></tr>
+                        <tr><td>0.91 – 1.00</td><td>Pure / Neon</td><td>Extremely bright</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-card">
+                <h2>Intensity (I) → Meaning & Appearance</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Intensity Range</th>
+                            <th>Interpretation</th>
+                            <th>Visual Appearance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>0.00 – 0.05</td><td>Absolute Black</td><td>Total darkness</td></tr>
+                        <tr><td>0.06 – 0.15</td><td>Very Dark</td><td>Nearly black</td></tr>
+                        <tr><td>0.16 – 0.30</td><td>Deep Tone</td><td>Dark shade</td></tr>
+                        <tr><td>0.31 – 0.45</td><td>Dim</td><td>Low brightness</td></tr>
+                        <tr><td>0.46 – 0.55</td><td>Midtone</td><td>Normal brightness</td></tr>
+                        <tr><td>0.56 – 0.70</td><td>Light</td><td>Bright</td></tr>
+                        <tr><td>0.71 – 0.85</td><td>Very Light</td><td>Soft glow</td></tr>
+                        <tr><td>0.86 – 1.00</td><td>Near White</td><td>Almost white</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="primary" class="section">
+            <div class="table-card">
+                <h2>Primary Emotions <span class="emotion-category category-primary">8 Core Emotions</span></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Primary Emotion</th>
+                            <th>Color Preview</th>
+                            <th>RGB (Medium)</th>
+                            <th>Colour Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Joy</strong></td><td><span class="color-box" style="background-color: rgb(255,255,0);"></span></td><td>(255, 255, 0)</td><td>Yellow</td></tr>
+                        <tr><td><strong>Trust</strong></td><td><span class="color-box" style="background-color: rgb(0,200,0);"></span></td><td>(0, 200, 0)</td><td>Green</td></tr>
+                        <tr><td><strong>Fear</strong></td><td><span class="color-box" style="background-color: rgb(100,56,135);"></span></td><td>(100, 56, 135)</td><td>Dark Purple</td></tr>
+                        <tr><td><strong>Surprise</strong></td><td><span class="color-box" style="background-color: rgb(0,170,138);"></span></td><td>(0, 170, 138)</td><td>Teal / Deep Cyan</td></tr>
+                        <tr><td><strong>Sadness</strong></td><td><span class="color-box" style="background-color: rgb(70,100,173);"></span></td><td>(70, 100, 173)</td><td>Deep Blue</td></tr>
+                        <tr><td><strong>Disgust</strong></td><td><span class="color-box" style="background-color: rgb(128,128,0);"></span></td><td>(128, 128, 0)</td><td>Olive</td></tr>
+                        <tr><td><strong>Anger</strong></td><td><span class="color-box" style="background-color: rgb(220,0,0);"></span></td><td>(220, 0, 0)</td><td>Red</td></tr>
+                        <tr><td><strong>Anticipation</strong></td><td><span class="color-box" style="background-color: rgb(255,155,0);"></span></td><td>(255, 155, 0)</td><td>Orange</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="intensity" class="section">
+            <div class="table-card">
+                <h2>Low Intensity Emotions <span class="emotion-category category-low">Subtle & Mild</span></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Low Intensity Emotion</th>
+                            <th>Color Preview</th>
+                            <th>RGB</th>
+                            <th>Colour Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Serenity</td><td><span class="color-box" style="background-color: rgb(255,255,153);"></span></td><td>(255, 255, 153)</td><td>Pale Yellow</td></tr>
+                        <tr><td>Acceptance</td><td><span class="color-box" style="background-color: rgb(152,251,152);"></span></td><td>(152, 251, 152)</td><td>Light Green</td></tr>
+                        <tr><td>Apprehension</td><td><span class="color-box" style="background-color: rgb(200,180,255);"></span></td><td>(200, 180, 255)</td><td>Lavender / Soft Purple</td></tr>
+                        <tr><td>Distraction</td><td><span class="color-box" style="background-color: rgb(175,238,238);"></span></td><td>(175, 238, 238)</td><td>Pale Turquoise / Light Teal</td></tr>
+                        <tr><td>Pensiveness</td><td><span class="color-box" style="background-color: rgb(160,185,230);"></span></td><td>(160, 185, 230)</td><td>Powder Blue / Muted Sky Blue</td></tr>
+                        <tr><td>Boredom</td><td><span class="color-box" style="background-color: rgb(189,189,80);"></span></td><td>(189, 189, 80)</td><td>Pale Olive / Moss Green</td></tr>
+                        <tr><td>Annoyance</td><td><span class="color-box" style="background-color: rgb(255,128,128);"></span></td><td>(255, 128, 128)</td><td>Light Coral / Pale Red</td></tr>
+                        <tr><td>Interest</td><td><span class="color-box" style="background-color: rgb(255,218,185);"></span></td><td>(255, 218, 185)</td><td>Peach Puff</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-card">
+                <h2>High Intensity Emotions <span class="emotion-category category-high">Strong & Powerful</span></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>High Intensity Emotion</th>
+                            <th>Color Preview</th>
+                            <th>RGB</th>
+                            <th>Colour Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Ecstasy</td><td><span class="color-box" style="background-color: rgb(255,204,0);"></span></td><td>(255, 204, 0)</td><td>Golden Yellow</td></tr>
+                        <tr><td>Admiration</td><td><span class="color-box" style="background-color: rgb(0,100,0);"></span></td><td>(0, 100, 0)</td><td>Dark Green</td></tr>
+                        <tr><td>Terror</td><td><span class="color-box" style="background-color: rgb(75,0,130);"></span></td><td>(75, 0, 130)</td><td>Royal Purple / Vivid Violet</td></tr>
+                        <tr><td>Amazement</td><td><span class="color-box" style="background-color: rgb(0,100,100);"></span></td><td>(0, 100, 100)</td><td>Dark Teal</td></tr>
+                        <tr><td>Grief</td><td><span class="color-box" style="background-color: rgb(30,60,140);"></span></td><td>(30, 60, 140)</td><td>Indigo / Dark Royal Blue</td></tr>
+                        <tr><td>Loathing</td><td><span class="color-box" style="background-color: rgb(85,85,0);"></span></td><td>(85, 85, 0)</td><td>Dark Olive / Army Green</td></tr>
+                        <tr><td>Rage</td><td><span class="color-box" style="background-color: rgb(150,0,0);"></span></td><td>(150, 0, 0)</td><td>Dark Red</td></tr>
+                        <tr><td>Vigilance</td><td><span class="color-box" style="background-color: rgb(255,99,71);"></span></td><td>(255, 99, 71)</td><td>Tomato Red / Reddish Orange</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="dyadic" class="section">
+            <div class="table-card">
+                <h2>Primary Dyads <span class="emotion-category category-primary">Adjacent Emotions</span></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dyad Name</th>
+                            <th>Combined Emotions</th>
+                            <th>Color Preview</th>
+                            <th>RGB</th>
+                            <th>Colour Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Love</td><td>Joy + Trust</td><td><span class="color-box" style="background-color: rgb(128,228,0);"></span></td><td>(127, 227, 0)</td><td>Lime Green</td></tr>
+                        <tr><td>Submission</td><td>Trust + Fear</td><td><span class="color-box" style="background-color: rgb(50,128,68);"></span></td><td>(50, 128, 67)</td><td>Forest Green</td></tr>
+                        <tr><td>Awe</td><td>Fear + Surprise</td><td><span class="color-box" style="background-color: rgb(50,113,136);"></span></td><td>(50, 113, 136)</td><td>Deep Teal Blue</td></tr>
+                        <tr><td>Disapproval</td><td>Surprise + Sadness</td><td><span class="color-box" style="background-color: rgb(35,135,156);"></span></td><td>(35, 135, 155)</td><td>Steel Blue</td></tr>
+                        <tr><td>Remorse</td><td>Sadness + Disgust</td><td><span class="color-box" style="background-color: rgb(99,114,86);"></span></td><td>(99, 114, 86)</td><td>Olive Gray</td></tr>
+                        <tr><td>Contempt</td><td>Disgust + Anger</td><td><span class="color-box" style="background-color: rgb(174,64,0);"></span></td><td>(174, 64, 0)</td><td>Burnt Orange</td></tr>
+                        <tr><td>Aggressiveness</td><td>Anger + Anticipation</td><td><span class="color-box" style="background-color: rgb(238,78,0);"></span></td><td>(237, 77, 0)</td><td>Vivid Orange-Red</td></tr>
+                        <tr><td>Optimism</td><td>Anticipation + Joy</td><td><span class="color-box" style="background-color: rgb(255, 205, 0);"></span></td><td>(255, 205, 0)</td><td>Golden Yellow</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Secondary Dyads <span class="emotion-category category-secondary">One Step Removed</span></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dyad Name</th>
+                            <th>Combined Emotions</th>
+                            <th>Color Preview</th>
+                            <th>RGB</th>
+                            <th>Colour Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Guilt</td><td>Joy + Fear</td><td><span class="color-box" style="background-color: rgb(178,156,68);"></span></td><td>(177, 155, 67)</td><td>Sandy Mustard</td></tr>
+                        <tr><td>Curiosity</td><td>Trust + Surprise</td><td><span class="color-box" style="background-color: rgb(0, 185, 69);"></span></td><td>(0, 185, 69)</td><td>Emerald Green / Sea Green</td></tr>
+                        <tr><td>Despair</td><td>Fear + Sadness</td><td><span class="color-box" style="background-color: rgb(85, 78, 154);"></span></td><td>(85, 78, 154)</td><td>Indigo Purple</td></tr>
+                        <tr><td>Unbelief</td><td>Surprise + Disgust</td><td><span class="color-box" style="background-color: rgb(64, 149, 69);"></span></td><td>(64, 149, 69)</td><td>Earthy Green / Avocado</td></tr>
+                        <tr><td>Envy</td><td>Sadness + Anger</td><td><span class="color-box" style="background-color: rgb(145, 50, 86);"></span></td><td>(145, 50, 86)</td><td>Deep Purple</td></tr>
+                        <tr><td>Cynicism</td><td>Disgust + Anticipation</td><td><span class="color-box" style="background-color: rgb(192, 142, 0);"></span></td><td>(192, 141, 0)</td><td>Mustard Yellow</td></tr>
+                        <tr><td>Pride</td><td>Anger + Joy</td><td><span class="color-box" style="background-color: rgb(238, 128, 0);"></span></td><td>(237, 127, 0)</td><td>Tangerine</td></tr>
+                        <tr><td>Hope</td><td>Anticipation + Trust</td><td><span class="color-box" style="background-color: rgb(128, 178, 0);"></span></td><td>(127, 177, 0)</td><td>Olive Lime</td></tr>
+                    </tbody>
+                </table>
+
+                <h2>Tertiary Dyads <span class="emotion-category category-tertiary">Opposite Emotions</span></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Dyad Name</th>
+                            <th>Combined Emotions</th>
+                            <th>Color Preview</th>
+                            <th>RGB</th>
+                            <th>Colour Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Morbidness</td><td>Joy + Disgust</td><td><span class="color-box" style="background-color: rgb(192, 192, 0);"></span></td><td>(191, 191, 0)</td><td>Dark Yellow / Olive Yellow</td></tr>
+                        <tr><td>Dominance</td><td>Trust + Anger</td><td><span class="color-box" style="background-color: rgb(110, 100, 0);"></span></td><td>(110, 100, 0)</td><td>Mustard / Dark Olive</td></tr>
+                        <tr><td>Anxiety</td><td>Fear + Anticipation</td><td><span class="color-box" style="background-color: rgb(178, 106, 68);"></span></td><td>(177, 105, 67)</td><td>Burnt Orange / Caramel</td></tr>
+                        <tr><td>Delight</td><td>Surprise + Joy</td><td><span class="color-box" style="background-color: rgb(128, 213, 69);"></span></td><td>(127, 212, 69)</td><td>Lime Green / Chartreuse</td></tr>
+                        <tr><td>Sentimentality</td><td>Sadness + Trust</td><td><span class="color-box" style="background-color: rgb(35, 150, 85);"></span></td><td>(35, 150, 86)</td><td>Emerald / Pine Green</td></tr>
+                        <tr><td>Shame</td><td>Disgust + Fear</td><td><span class="color-box" style="background-color: rgb(114, 92, 67);"></span></td><td>(114, 92, 67)</td><td>Earthy Brown / Taupe</td></tr>
+                        <tr><td>Outrage</td><td>Anger + Surprise</td><td><span class="color-box" style="background-color: rgb(110, 85, 69);"></span></td><td>(110, 85, 69)</td><td>Burnt Umber / Clay</td></tr>
+                        <tr><td>Pessimism</td><td>Anticipation + Sadness</td><td><span class="color-box" style="background-color: rgb(162, 127, 86);"></span></td><td>(162, 127, 86)</td><td>Sandstone / Desert Tan</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="special" class="section">
+            <div class="table-card">
+                <h2>Auxiliary Colors <span class="emotion-category category-primary">Non-Plutchik States</span></h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Emotion Name</th>
+                            <th>Color Preview</th>
+                            <th>RGB</th>
+                            <th>Colour Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Strength</td><td><span class="color-box" style="background-color: rgb(0,0,0);"></span></td><td>(0, 0, 0)</td><td>Black</td></tr>
+                        <tr><td>Calmness</td><td><span class="color-box" style="background-color: rgb(250,250,250);"></span></td><td>(250, 250, 250)</td><td>White</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // Function to handle tab switching
+                window.showSection = (sectionId) => {
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(sectionId).classList.add('active');
+
+                    document.querySelectorAll('.tab-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                        if (btn.getAttribute('onclick').includes(`'${sectionId}'`)) {
+                            btn.classList.add('active');
+                        }
+                    });
+                    // Clear search on tab switch
+                    document.getElementById('searchInput').value = '';
+                    resetHighlights();
+                };
+
+                // Search Functionality
+                const searchInput = document.getElementById('searchInput');
+                searchInput.addEventListener('keyup', handleSearch);
+
+                function handleSearch() {
+                    const query = searchInput.value.toLowerCase().trim();
+                    resetHighlights();
+                    
+                    if (query.length < 2) return;
+
+                    document.querySelectorAll('tbody tr').forEach(row => {
+                        let rowMatches = false;
+                        row.style.display = 'none';
+
+                        row.querySelectorAll('td').forEach(cell => {
+                            const originalText = cell.textContent;
+                            const lowerText = originalText.toLowerCase();
+                            
+                            if (lowerText.includes(query)) {
+                                rowMatches = true;
+                                
+                                // Highlight the matched text (simple innerHTML replacement)
+                                const regex = new RegExp(`(${query})`, 'gi');
+                                cell.innerHTML = originalText.replace(regex, '<span class="highlight">$&</span>');
+                            }
+                        });
+
+                        // Show the row if a match was found
+                        if (rowMatches) {
+                            row.style.display = '';
+                            // Ensure the parent section is visible (if needed, this relies on tab switching logic)
+                            const parentSection = row.closest('.section');
+                            if (parentSection) {
+                                parentSection.classList.add('active');
+                            }
+                        }
+                    });
+                }
+                
+                function resetHighlights() {
+                    document.querySelectorAll('.highlight').forEach(span => {
+                        span.outerHTML = span.innerHTML; // Remove the span, keeping the content
+                    });
+                    
+                    // Reset all rows to visible (or controlled by external tab logic)
+                    document.querySelectorAll('tbody tr').forEach(row => {
+                         row.style.display = '';
+                    });
+                }
+            });
+        </script>
+
+
+        <div class="back-container">
+            <a href="{{ url_for('upload_form') }}" class="back-link">⬅ Back to Upload</a>
+        </div>
+    </div>
+</body>
+</html>
